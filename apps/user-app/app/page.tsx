@@ -1,10 +1,25 @@
-import { Button } from "@repo/ui/button";
 import { prisma } from "@repo/db";
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-between p-24">
-      Hello World
-    </div>
-  );
+export default async function Home() {
+  try {
+    const users = await prisma.user.findMany();
+    return <pre>{JSON.stringify(users, null, 2)}</pre>;
+  } catch (e) {
+    console.error(e);
+
+    return (
+      <pre>
+        {JSON.stringify(
+          {
+            name: e?.name,
+            code: e?.code,
+            message: e?.message,
+            meta: e?.meta,
+          },
+          null,
+          2,
+        )}
+      </pre>
+    );
+  }
 }
